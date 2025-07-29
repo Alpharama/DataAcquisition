@@ -6,9 +6,19 @@ from datetime import datetime
 from tqdm import tqdm
 from utils import get_last_boosted_tokens, get_pairs_by_token
 
-seen_tokens = []
-tokens_to_look = []
-threshold_times = {}
+STATE_FILE = "state.json"
+
+# Chargement de l'état précédent
+if os.path.exists(STATE_FILE):
+    with open(STATE_FILE, "r") as f:
+        state = json.load(f)
+        seen_tokens = [tuple(t) for t in state.get("seen_tokens", [])]
+        tokens_to_look = [tuple(t) for t in state.get("tokens_to_look", [])]
+        threshold_times = {tuple(k): v for k, v in state.get("threshold_times", {}).items()}
+else:
+    seen_tokens = []
+    tokens_to_look = []
+    threshold_times = {}
 
 def run():
     print(f"🚀 Lancement du pipeline à {datetime.now()}")
@@ -51,16 +61,24 @@ def run():
     else:
         print("⚠️ Aucun résultat à sauvegarder.")
 
+    # Sauvegarde des résultats
     timestamp = int(time.time() * 1000)
     output_dir = "results"
     os.makedirs(output_dir, exist_ok=True)
-
     file_path = os.path.join(output_dir, f"results_{timestamp}.json")
     with open(file_path, "w") as f:
         json.dump(results, f, indent=2)
 
     print(f"💾 Résultats sauvegardés dans '{file_path}'")
 
+    # Sauvegarde de l'état
+    state = {
+        "seen_tokens": list(map(list, seen_tokens)),
+        "tokens_to_look": list(map(list, tokens_to_look)),
+        "threshold_times": {str(list(k)): v for k, v in threshold_times.items()}
+    }
+    with open(STATE_FILE, "w") as f:
+        json.dump(state, f, indent=2)
 
 if __name__ == "__main__":
     run()
