@@ -33,7 +33,6 @@ def run():
         try : 
             token = {'chainId': token_data['chainId'], 'tokenAddress': token_data['tokenAddress']}
             token_tuple = (token_data['chainId'], token_data['tokenAddress'])
-
             if token_tuple in tokens_to_look:
                 if threshold_times[token_tuple] < int(time.time() * 1000) + 24 * 60 * 60 * 1000:
                     pair_data = get_pairs_by_token(token)
@@ -52,7 +51,6 @@ def run():
                             seen_tokens.append(token_tuple)
         except Exception as e:
             print(f"❌ Erreur lors de la récupération des paires : {e}")
-
     if results:
         print(f"✅ Données sauvegardées ({len(results)} tokens)")
     else:
