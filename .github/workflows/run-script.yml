@@ -8,6 +8,8 @@ on:
 jobs:
   run-pipeline:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # ✅ Donne le droit de push au repo
 
     steps:
       - name: Checkout du dépôt
@@ -41,4 +43,3 @@ jobs:
         with:
           name: resultats-json
           path: results/
-
