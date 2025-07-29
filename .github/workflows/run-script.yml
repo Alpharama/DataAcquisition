@@ -2,8 +2,8 @@ name: Exécution automatique du pipeline
 
 on:
   schedule:
-    - cron: '*/5 * * * *'   # toutes les 5 minutes
-  workflow_dispatch:         # lancement manuel possible
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
 
 jobs:
   run-pipeline:
@@ -30,7 +30,8 @@ jobs:
         run: python scripts.py
 
       - name: Upload des résultats JSON
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: resultats-json
           path: results/
+
