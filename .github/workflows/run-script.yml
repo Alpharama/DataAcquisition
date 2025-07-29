@@ -2,18 +2,21 @@ name: Exécution automatique du pipeline
 
 on:
   schedule:
-    - cron: '*/1 * * * *'  # Toutes les 1 minutes
-  workflow_dispatch:
+    - cron: '*/1 * * * *'   # toutes les 1 minutes
+  workflow_dispatch:         # permet de lancer manuellement
 
 jobs:
   run-pipeline:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Cloner le dépôt
+      - name: Checkout du dépôt
         uses: actions/checkout@v3
 
-      - name: Installer Python
+      - name: Lister les fichiers à la racine (debug)
+        run: ls -l
+
+      - name: Installer Python 3.10
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
@@ -23,5 +26,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Lancer le script
+      - name: Lancer le script Python
         run: python script.py
+
