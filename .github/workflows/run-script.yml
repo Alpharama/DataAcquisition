@@ -2,7 +2,7 @@ name: Pipeline de collecte avec état persistant
 
 on:
   schedule:
-    - cron: '*/1 * * * *'  # toutes les 1 minutes
+    - cron: '*/30 * * * *'  # toutes les 30 minutes
   workflow_dispatch:
 
 jobs:
